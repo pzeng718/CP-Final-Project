@@ -1,0 +1,15 @@
+.App {
+    width: 50vw;
+    height: 40vh;
+    margin: 29vh 25vw;
+    border: 1px solid gray;
+}
+.btn-margin{
+    margin: 0 5px;
+}
+.todo-add-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
