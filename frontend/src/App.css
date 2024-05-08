@@ -13,3 +13,6 @@
     justify-content: center;
     padding-top: 10px;
 }
+.ant-modal {
+    margin-top: 30vh !important;
+}
