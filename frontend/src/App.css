@@ -1,8 +1,9 @@
 .App {
-    width: 50vw;
-    height: 40vh;
-    margin: 29vh 25vw;
+    width: 70vw;
+    height: 70vh;
+    margin: 12vh 15vw;
     border: 1px solid gray;
+    overflow-y: scroll;
 }
 .btn-margin{
     margin: 0 5px;
@@ -15,4 +16,20 @@
 }
 .ant-modal {
     margin-top: 30vh !important;
+}
+.date-picker {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin: 20px 0;
+}
+.empty-msg-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.login-container {
+    margin: 20vh 40vw;
+    width: 20vw;
+    height: 60vh;
 }

@@ -1,12 +1,18 @@
 const mysql = require('mysql');
+const fs = require('fs');
+const path = require('path');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
+    host: 'cppart2db.mysql.database.azure.com',
+    user: 'pz640',
     port: 3306,
-    password: 'password123',
-    database: 'todo'
+    password: 'Password123!',
+    database: 'todo',
+    ssl:{
+        ca: fs.readFileSync(path.join(__dirname, './DigiCertGlobalRootCA.crt')),
+        rejectUnauthorized: false
+    }
 });
 
 const executeQuery = (query, callback) => {

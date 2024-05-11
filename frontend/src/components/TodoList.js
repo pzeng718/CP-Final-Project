@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import moment from 'moment';
 import axios from 'axios';
-import TodoItem from './TodoItem';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
+import TodoItem from './TodoItem';
+import DateSelector from './DateSelector';
 import { AutoComplete, Button, DatePicker, Input, Modal, Select, message } from 'antd';
 const { TextArea } = Input;
 
@@ -17,6 +18,7 @@ function TodoList() {
     const [autoCompOptions, setAutoCompOptions] = useState([]);
     const [description, setDescription] = useState('');
     const [dueDate, setDueDate] = useState(moment());
+    const [selectedDate, setSelectedDate] = useState(moment().format('MM-DD'));
     const [priority, setPriority] = useState('Low');
     const [editingId, setEditingId] = useState(null); 
     const [showTodoDetailModal, setShowTodoDetailModal] = useState(false);
@@ -25,17 +27,27 @@ function TodoList() {
     useEffect(() => {
         axios.post(dbUrl, {query: 'select * from todo.todoitem;'}).then((resp, err) => {
             if(resp.status === 200){
-                setTodos(resp.data.map(todo => {
-                    return {
-                        id: todo.TodoID,
-                        description: todo.Description,
-                        dueDate: moment(todo.DueDate).format('YYYY-MM-DD HH:mm'),
-                        priority: todo.Priority
-                    }
-                }))
+                const sortedTodos = resp.data.map(todo => ({
+                    id: todo.TodoID,
+                    description: todo.Description,
+                    dueDate: moment(todo.DueDate).format('YYYY-MM-DD HH:mm'),
+                    priority: todo.Priority
+                })).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                setTodos(sortedTodos);
             }
         });
     }, [])
+
+    const groupTasksByMonthDay = useMemo(() => {
+        return todos.reduce((groups, task) => {
+            const date = moment(task.dueDate).format('MM-DD'); // Format as 'Month-Day'
+            if (!groups[date]) {
+                groups[date] = [];
+            }
+            groups[date].push(task);
+            return groups;
+        }, {});
+    }, [todos]);
 
     const handleAddTodo = async () => {
         const newTodo = {
@@ -151,13 +163,14 @@ function TodoList() {
 
     const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 300), []);
 
-
-
     return (
         <div>
-            {todos.map(todo => (
-                <TodoItem key={todo.id} item={todo} onEdit={handleEditTodo} onDelete={handleDeleteTodo} />
-            ))}
+            <DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+            <div>
+                {groupTasksByMonthDay[selectedDate] ? groupTasksByMonthDay[selectedDate].map(todo => (
+                    <TodoItem key={todo.id} item={todo} onEdit={handleEditTodo} onDelete={handleDeleteTodo} />
+                )) : <div className='empty-msg-container'>Nothing for {selectedDate}</div>}
+            </div>
             <Modal
                 title={curMode === MODE_ADD ? "Add new todo" : "Edit todo"}
                 open={showTodoDetailModal}
@@ -218,7 +231,13 @@ function TodoList() {
                 />
             </Modal>
             <div className='todo-add-container'>
-                <Button type='primary' onClick={() => setShowTodoDetailModal(true)}>Add Todo</Button>
+                <Button type='primary' onClick={() => {
+                    setShowTodoDetailModal(true)
+                    setDueDate(moment())
+                }}
+                >
+                    Add Todo
+                </Button>
             </div>
         </div>
     );
