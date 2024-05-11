@@ -1,0 +1,6 @@
+absl-py==1.4.0
+aiohttp==3.9.5
+numpy==1.25.2
+tensorflow==2.15.0
+keras==2.15.0
+flask==3.0.3
