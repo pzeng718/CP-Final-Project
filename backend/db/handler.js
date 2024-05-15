@@ -12,7 +12,8 @@ const pool = mysql.createPool({
     ssl:{
         ca: fs.readFileSync(path.join(__dirname, './DigiCertGlobalRootCA.crt')),
         rejectUnauthorized: false
-    }
+    },
+    connectTimeout: 30000
 });
 
 const executeQuery = (query, callback) => {

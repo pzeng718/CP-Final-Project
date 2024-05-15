@@ -16,7 +16,7 @@ const JWT_KEY = 'g70OvStrb6r0Sp9vUT3IEnrgqmJ20kAuw+wyRazHXUfs9ptNAwN85bnM3BAn672
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:3001', 
+    origin: 'http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com',
     credentials: true
 }));
 

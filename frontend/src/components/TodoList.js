@@ -8,7 +8,7 @@ import DateSelector from './DateSelector';
 import { AutoComplete, Button, DatePicker, Input, Modal, Select, message } from 'antd';
 const { TextArea } = Input;
 
-const dbUrl = 'http://localhost:3000/db';
+const dbUrl = 'http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com:3000/db';
 
 function TodoList() {
     const MODE_ADD = 1;
@@ -146,7 +146,7 @@ function TodoList() {
     }
 
     const fetchSuggestions = async (val) => {
-        const response = await axios.post('http://localhost:3000/predict', {
+        const response = await axios.post('http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com:3000/predict', {
             text: val
         });
         if(response.status === 200){

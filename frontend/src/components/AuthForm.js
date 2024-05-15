@@ -8,7 +8,7 @@ function AuthForm({setAuth}) {
 
     const onFinish = async (values) => {
         let {username, password} = values;
-        const url = `http://localhost:3000/${isLogin ? 'login' : 'signup'}`;
+        const url = `http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com:3000/${isLogin ? 'login' : 'signup'}`;
         try {
             const response = await axios.post(url, { username, password }, { withCredentials: true });
             console.log('Response:', response.data);
