@@ -33,3 +33,9 @@
     width: 20vw;
     height: 60vh;
 }
+
+.uinfo-container {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}

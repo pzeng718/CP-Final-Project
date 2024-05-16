@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { message, Button, Form, Input, Checkbox } from 'antd';
 
-function AuthForm({setAuth}) {
+function AuthForm({setAuth, setUserId}) {
     const [isLogin, setIsLogin] = useState(true);
 
     const onFinish = async (values) => {
         let {username, password} = values;
-        const url = `http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com:3000/${isLogin ? 'login' : 'signup'}`;
+        const url = `http://cppart2-web-1295080897.us-east-2.elb.amazonaws.com:3000/auth/${isLogin ? 'login' : 'signup'}`;
         try {
             const response = await axios.post(url, { username, password }, { withCredentials: true });
             console.log('Response:', response.data);
             message.success(`${isLogin ? 'Login' : 'Signup'} success`);
+            let uid = response.data.userId;
+            setUserId(uid);
             setAuth(true);
         } catch (error) {
             message.error(`${isLogin ? 'Login' : 'Signup'} failed`);
@@ -63,7 +66,7 @@ function AuthForm({setAuth}) {
                 </Form.Item>
             
                 <Form.Item>
-                    <Button style={{marginRight: '10px'}} type="primary" htmlType="submit" className="login-form-button">
+                    <Button style={{marginRight: '10px'}} type="primary" htmlType="submit" className="login-form-button" onClick={() => setIsLogin(true)}>
                     Log in
                     </Button>
                     Or <Button style={{marginLeft: "10px"}} type="primary" htmlType="submit" onClick={() => setIsLogin(false)}>Sign up</Button>
